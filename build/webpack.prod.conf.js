@@ -5,9 +5,19 @@ var webpack = require('webpack')
 // 引入基本配置
 var config = require('./webpack.config');
 
+var SOURCE_MAP = true
+config.devtool = SOURCE_MAP ? 'eval-source-map' : false
+
+function generateExtractLoaders (loaders) {
+  return loaders.map(function (loader) {
+    return loader + '-loader' + (SOURCE_MAP ? '?sourceMap' : '')
+  }).join('!')
+}
+
 config.vue = {
   loaders: {
-    css: ExtractTextPlugin.extract("css")
+    css: ExtractTextPlugin.extract('vue-style-loader', generateExtractLoaders(['css'])),
+    sass: ExtractTextPlugin.extract('vue-style-loader', generateExtractLoaders(['css', 'sass']))
   }
 };
 
@@ -31,7 +41,7 @@ config.plugins = [
   }), 
   new webpack.optimize.OccurenceOrderPlugin(),
   // 提取css为单文件
-  new ExtractTextPlugin("../[name].[contenthash].css"), 
+  new ExtractTextPlugin("css/[name].[contenthash].css"), 
   new HtmlWebpackPlugin({
     filename: '../index.html',
     template: path.resolve(__dirname, '../app/index.html'),

@@ -2,11 +2,13 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var bourbon = require('node-bourbon').includePaths;
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
-  // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的index.js文件
+  // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的main.js文件
   entry: {
-    index: path.resolve(__dirname, '../app/index.js'),
+    main: path.resolve(__dirname, '../app/app.js'),
     vendors: [
       'Vue'
     ]
@@ -16,7 +18,7 @@ module.exports = {
     // 输出路径是 myProject/test/static
     path: path.resolve(__dirname, '../test/static'),
     publicPath: 'static/',
-    filename: '[name].[hash].js',
+    filename: 'js/[name].[hash].js',
     chunkFilename: '[id].[chunkhash].js'
   },
   resolve: {
@@ -25,7 +27,7 @@ module.exports = {
   module: {
 
     loaders: [
-    // 使用vue-loader 加载 .vue 结尾的文件
+      // 使用vue-loader 加载 .vue 结尾的文件
       {
         test: /\.vue$/, 
         loader: 'vue'   
@@ -35,10 +37,16 @@ module.exports = {
         loader: 'babel?presets=es2015',
         exclude: /node_modules/
       },
-      {   
-        test: /\.scss$/, 
-        loader: "style!css!sass?includePaths[]=" + JSON.stringify(bourbon)
-      },
+      // {
+      //   test: /\.css$/,
+      //   loader: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!autoprefixer'),
+      //   exclude: /node_modules/
+      // },
+      // {
+      //   test: /\.scss$/,
+      //   loader: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!autoprefixer!sass-loader'),
+      //   exclude: /node_modules/
+      // },
       // 加载图片
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -49,6 +57,15 @@ module.exports = {
         }
       }
     ]
+  },
+  vue: {
+    loaders: {
+      less: 'vue-style!css!less',
+      sass: 'vue-style!css!sass'
+    },
+    autoprefixer: {
+      browsers: ['last 2 versions']
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
