@@ -1,9 +1,11 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin') 
+// var CleanWebpackPlugin = require('clean-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin') 
 var path = require('path')
 var webpack = require('webpack')
 // 引入基本配置
 var config = require('./webpack.config');
+var debug = true;
 
 var SOURCE_MAP = true
 config.devtool = SOURCE_MAP ? 'eval-source-map' : false
@@ -30,7 +32,7 @@ config.plugins = [
   // http://vuejs.github.io/vue-loader/workflow/production.html
   new webpack.DefinePlugin({
     'process.env': {
-      NODE_ENV: '"production"'
+      NODE_ENV: 'production'
     }
   }),
   // 压缩代码

@@ -1,14 +1,14 @@
 // nodejs 中的path模块
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var bourbon = require('node-bourbon').includePaths;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
+  devtool: 'cheap-module-eval-source-map',
   // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的main.js文件
   entry: {
-    main: path.resolve(__dirname, '../app/app.js'),
+    main: path.resolve(__dirname, '../app/App.js'),
     vendors: [
       'Vue'
     ]
@@ -17,7 +17,7 @@ module.exports = {
   output: {
     // 输出路径是 myProject/test/static
     path: path.resolve(__dirname, '../test/static'),
-    publicPath: 'static/',
+    publicPath: 'http://t.c.m.163.com/ly/peojectName',
     filename: 'js/[name].[hash].js',
     chunkFilename: '[id].[chunkhash].js'
   },
@@ -25,7 +25,6 @@ module.exports = {
     extensions: ['', '.js', '.vue']
   },
   module: {
-
     loaders: [
       // 使用vue-loader 加载 .vue 结尾的文件
       {
